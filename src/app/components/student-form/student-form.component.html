@@ -1,0 +1,113 @@
+<div class="modal-header">
+    <h2 [ngClass]="receivedData?.isEdit ? 'bg-pink' : 'bg-purple'" mat-dialog-title>{{receivedData?.modalTitle}}</h2>
+    <button mat-icon-button type="reset" (click)="onCancel()">
+        <mat-icon aria-hidden="false" aria-label="cancel" fontIcon="cancel"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="studentForm" (ngSubmit)="onSave()">
+        <h4>Basic Details</h4>
+        <div class="input-row">
+            <mat-form-field class="form-field">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullName" />
+                <mat-error class="err-msg" *ngIf="getInputName('fullName')?.touched && getInputName('fullName')?.errors && getInputName('fullName')?.errors?.['required']">
+                    Full Name is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="form-field">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender">
+                    <ng-container *ngFor="let item of genderList">
+                        <mat-option [value]="item.value">{{item.label}}</mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error class="err-msg" *ngIf="getInputName('gender')?.touched || getInputName('gender')?.errors?.['required']">
+                    Gender is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="input-row">
+            <mat-form-field class="form-field">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="disableFutureDates">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error class="err-msg" *ngIf="getInputName('dateOfBirth')?.touched || getInputName('dateOfBirth')?.errors?.['required']">
+                    Date Of Birth is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="form-field">
+                <mat-label>Phone Number</mat-label>
+                <input type="number" matInput formControlName="phoneNumber" />
+                <mat-error class="err-msg" *ngIf="getInputName('phoneNumber')?.touched || getInputName('phoneNumber')?.errors?.['required']">
+                    Phone Number is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="input-row">
+            <mat-form-field class="form-field-half">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+                <mat-error class="err-msg" *ngIf="getInputName('email')?.touched">
+                    {{getInputName('email')?.errors?.['pattern'] ? 'Email is valid email' : 'Email is required'}}
+                </mat-error>
+
+            </mat-form-field>
+        </div>
+        <div formGroupName="address">
+            <h4>Address</h4>
+            <div class="input-row">
+                <mat-form-field class="form-field">
+                    <mat-label>Locality</mat-label>
+                    <input matInput formControlName="locality" />
+                    <mat-error class="err-msg" *ngIf="getAddressInputName('locality')?.touched || getAddressInputName('locality')?.errors?.['required']">
+                        Locality is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="form-field">
+                    <mat-label>Country</mat-label>
+                    <input matInput formControlName="country" [readonly]="true" />
+                </mat-form-field>
+            </div>
+            <div class="input-row">
+                <mat-form-field class="form-field">
+                    <mat-label>State</mat-label>
+                    <mat-select formControlName="state">
+                        <ng-container *ngFor="let item of stateList">
+                            <mat-option [value]="item.value">{{item.label}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error class="err-msg" *ngIf="getAddressInputName('state')?.touched || getAddressInputName('state')?.errors?.['required']">
+                        State is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="form-field">
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="city" />
+                    <mat-error class="err-msg" *ngIf="getAddressInputName('city')?.touched || getAddressInputName('city')?.errors?.['required']">
+                        City is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="input-row">
+            <mat-form-field class="form-field-half">
+                <mat-label>Pincode</mat-label>
+                <input type="number" matInput formControlName="pincode" />
+                <mat-error class="err-msg" *ngIf="getAddressInputName('pincode')?.touched || getAddressInputName('pincode')?.errors?.['required']">
+                    Pincode is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <mat-dialog-actions>
+                <button mat-stroked-button color="warn" type="reset" (click)="onCancel()">Cancel</button>
+                <button mat-raised-button type="submit" [color]="receivedData?.isEdit ? 'accent' : 'primary'" >
+                    {{receivedData?.isEdit ? 'Update' : 'Submit'}}
+                </button>
+            </mat-dialog-actions>
+        </div>
+    </form>
+</mat-dialog-content>
